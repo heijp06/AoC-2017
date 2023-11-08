@@ -4,6 +4,11 @@ import Lib (part1, part2)
 
 main :: IO ()
 main = do
+    input <- readInput
+    print $ part1 input
+    print $ part2 input
+
+readInput :: IO String
+readInput = do
     input <- readFile "..\\data\\day01.txt"
-    print $ part1 $ head (lines input)
-    print $ part2 $ head (lines input)
+    return $ head (lines input)
