@@ -57,3 +57,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - day02
+    - hspec
