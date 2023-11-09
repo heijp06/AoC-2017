@@ -9,6 +9,4 @@ main = do
     print $ part2 input
 
 readInput :: IO [String]
-readInput = do
-    input <- readFile "..\\data\\day02.txt"
-    return $ lines input
+readInput = lines <$> readFile "..\\data\\day02.txt"
