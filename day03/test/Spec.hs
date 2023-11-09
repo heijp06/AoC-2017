@@ -29,10 +29,10 @@ specs = do
    describe "part1" $ for_ examples1 (test part1)
    describe "stress" $ for_ examples2 (test stress)
     where
-      test func (position, value) = it description assertion
+      test func (square, value) = it description assertion
         where
-          description = show position ++ " -> " ++ show value
-          assertion = position `shouldBe` result
-          result = func position
+          description = show square ++ " -> " ++ show value
+          assertion = result `shouldBe` value
+          result = func square
 
 
