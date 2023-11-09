@@ -37,12 +37,23 @@ move = do
     MemoryLocation{..} <- get
     case position of
         (x, y) | x == size && y == size -> do
-            put MemoryLocation {square = square + 1, position = (size + 1, size), size = size + 1 }
+            nextSize
         (x, y) | x == size && y > -size -> do
-            put MemoryLocation { square = square + 1, position = (x, y - 1), .. }
+            nextSquare (x, y - 1)
         (x, y) | y == -size && x > -size -> do
-            put MemoryLocation { square = square + 1, position = (x - 1, y), .. }
+            nextSquare (x - 1, y)
         (x, y) | x == -size && y < size -> do
-            put MemoryLocation { square = square + 1, position = (x, y + 1), .. }
-        (x, y) | y == size -> do
-            put MemoryLocation { square = square + 1, position = (x + 1, y), .. }
+            nextSquare (x, y + 1)
+        (x, y) -> do
+            nextSquare (x + 1, y)
+
+nextSize :: State MemoryLocation ()
+nextSize = do
+    MemoryLocation{..} <- get
+    put MemoryLocation { size = size + 1, .. }
+    nextSquare (size + 1, size)
+
+nextSquare :: Position -> State MemoryLocation ()
+nextSquare pos = do
+    MemoryLocation{..} <- get
+    put MemoryLocation { square = square + 1, position = pos, .. }
