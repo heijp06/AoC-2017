@@ -8,18 +8,21 @@ module Lib
 
 import Control.Monad (replicateM)
 import Control.Monad.State.Lazy (State, execState, put, get)
+import Data.Maybe (fromMaybe)
 
 type Position = (Int, Int)
 
 data MemoryLocation = MemoryLocation { square :: Int
                                      , position :: Position
                                      , size :: Int
+                                     , values :: [(Position, Int)]
                                      }
 
 start :: MemoryLocation
 start = MemoryLocation { square = 1
                        , position = (0, 0)
                        , size = 0
+                       , values = [((0, 0), 1)]
                        }
 
 part1 :: Int -> Int
@@ -27,10 +30,14 @@ part1 n = abs x + abs y
     where
         (x, y) = position $ execState (replicateM (n - 1) move) start
 
+part2 :: Int -> Int
 part2 = undefined
 
 stress :: Int -> Int
-stress = undefined
+stress n = result
+    where
+        xs = values $ execState (replicateM (n - 1) move) start
+        result = snd $ head xs
 
 move :: State MemoryLocation ()
 move = do
@@ -51,4 +58,8 @@ nextSize = do
 nextSquare :: Position -> State MemoryLocation ()
 nextSquare pos = do
     MemoryLocation{..} <- get
-    put MemoryLocation { square = square + 1, position = pos, .. }
+    put MemoryLocation { square = square + 1, position = pos, values = (pos, getValue pos values) : values, .. }
+
+getValue :: Position -> [(Position, Int)] -> Int
+getValue (x, y) values =
+    sum [ fromMaybe 0 $ lookup (x + dx, y + dy) values | dx <- [-1..1], dy <- [-1..1], (dx, dy) /= (0, 0) ]
