@@ -7,7 +7,7 @@ module Lib
     ) where
 
 import Control.Monad (replicateM)
-import Control.Monad.State.Lazy (State, execState, put, get)
+import Control.Monad.State.Lazy (State, evalState, execState, put, get)
 import Data.Maybe (fromMaybe)
 
 type Position = (Int, Int)
@@ -31,7 +31,7 @@ part1 n = abs x + abs y
         (x, y) = position $ execState (replicateM (n - 1) move) start
 
 part2 :: Int -> Int
-part2 = undefined
+part2 n = evalState (search n) start
 
 stress :: Int -> Int
 stress n = result
@@ -63,3 +63,13 @@ nextSquare pos = do
 getValue :: Position -> [(Position, Int)] -> Int
 getValue (x, y) values =
     sum [ fromMaybe 0 $ lookup (x + dx, y + dy) values | dx <- [-1..1], dy <- [-1..1], (dx, dy) /= (0, 0) ]
+
+search :: Int -> State MemoryLocation Int
+search n = do
+    MemoryLocation{..} <- get
+    let (_, v) = head values
+    case v of
+        v' | v' > n -> return v'
+        _ -> do
+            move
+            search n

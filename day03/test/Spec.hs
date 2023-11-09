@@ -28,6 +28,7 @@ specs :: Spec
 specs = do
    describe "part1" $ for_ examples1 (test part1)
    describe "stress" $ for_ examples2 (test stress)
+   describe "part2" $ it "part2 11 -> 23" $ part2 11 `shouldBe` 23
     where
       test func (square, value) = it description assertion
         where
