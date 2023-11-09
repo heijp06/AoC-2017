@@ -36,16 +36,11 @@ move :: State MemoryLocation ()
 move = do
     MemoryLocation{..} <- get
     case position of
-        (x, y) | x == size && y == size -> do
-            nextSize
-        (x, y) | x == size && y > -size -> do
-            nextSquare (x, y - 1)
-        (x, y) | y == -size && x > -size -> do
-            nextSquare (x - 1, y)
-        (x, y) | x == -size && y < size -> do
-            nextSquare (x, y + 1)
-        (x, y) -> do
-            nextSquare (x + 1, y)
+        (x, y) | x == size && y == size -> nextSize
+        (x, y) | x == size && y > -size -> nextSquare (x, y - 1)
+        (x, y) | y == -size && x > -size -> nextSquare (x - 1, y)
+        (x, y) | x == -size && y < size -> nextSquare (x, y + 1)
+        (x, y) -> nextSquare (x + 1, y)
 
 nextSize :: State MemoryLocation ()
 nextSize = do
