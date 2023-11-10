@@ -68,8 +68,8 @@ search :: Int -> State MemoryLocation Int
 search n = do
     MemoryLocation{..} <- get
     let (_, v) = head values
-    case v of
-        v' | v' > n -> return v'
-        _ -> do
+    if v > n
+        then return v
+        else do
             move
             search n
