@@ -11,5 +11,5 @@ part1 = solve id
 part2 :: [[String]] -> Int
 part2 = solve sort
 
-solve :: (String -> String) -> [[String]] -> Int
+solve :: (a -> a) -> [[a]] -> Int
 solve f xss = sum [ 1 | xs <- xss, (nub . map f) xs == map f xs ]
