@@ -6,7 +6,10 @@ module Lib
 import Data.List (nub, sort)
 
 part1 :: [[String]] -> Int
-part1 xss = sum [ 1 | xs <- xss, nub xs == xs ]
+part1 = solve id
 
 part2 :: [[String]] -> Int
-part2 xss = sum [ 1 | xs <- xss, (nub . map sort) xs == map sort xs ]
+part2 = solve sort
+
+solve :: (String -> String) -> [[String]] -> Int
+solve f xss = sum [ 1 | xs <- xss, (nub . map f) xs == map f xs ]
