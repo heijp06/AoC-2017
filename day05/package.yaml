@@ -37,6 +37,7 @@ library:
   source-dirs: src
   dependencies:
   - mtl
+  - containers
 
 executables:
   day05-exe:
