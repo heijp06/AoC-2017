@@ -10,3 +10,5 @@ main = hspec $ do
         it "next example" $ next example `shouldBe` [ 2, 4, 1, 2]
 
         it "part1 example" $ part1 example `shouldBe` 5
+
+        it "part2 example" $ part2 example `shouldBe` 4
