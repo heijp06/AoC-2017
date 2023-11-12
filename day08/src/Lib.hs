@@ -45,13 +45,14 @@ parse xs = Command { r1 = head ws
                    }
     where
         ws = words xs
-        buildOp "inc" x = let v = (read x :: Int) in (+v)
-        buildOp "dec" x = let v = (read x :: Int) in subtract v
+        buildOp "inc" x = (+int x)
+        buildOp "dec" x = subtract (int x)
         buildOp op _ = error $ "Unknown operation: " ++ op
-        buildComp "<" x = let v = (read x :: Int) in (<v)
-        buildComp "<=" x = let v = (read x :: Int) in (<=v)
-        buildComp ">" x = let v = (read x :: Int) in (>v)
-        buildComp ">=" x = let v = (read x :: Int) in (>=v)
-        buildComp "==" x = let v = (read x :: Int) in (==v)
-        buildComp "!=" x = let v = (read x :: Int) in (/=v)
+        buildComp "<" x = (<int x)
+        buildComp "<=" x = (<=int x)
+        buildComp ">" x = (>int x)
+        buildComp ">=" x = (>=int x)
+        buildComp "==" x = (==int x)
+        buildComp "!=" x = (/=int x)
         buildComp comp _ = error $ "Unknown comparison: " ++ comp
+        int x = read x :: Int
