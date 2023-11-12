@@ -11,13 +11,17 @@ data State = State { level :: Int
                    }
 
 part1 :: String -> Int
-part1 xs = total $ group State { level = 1
+part1 xs = total $ many State { level = 1
                                , total = 0
                                , stream = xs
                                }
 
 part2 :: String -> Int
 part2 = undefined
+
+many :: State -> State
+many state@State{..} | head stream == '{' = group state
+many state = state
 
 group :: State -> State
 group state@State{..} | head stream == '}' = state
