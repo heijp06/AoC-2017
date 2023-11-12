@@ -14,15 +14,25 @@ data Command = Command { r1 :: String
                        , comp :: Int -> Bool
                        }
 
-part1 :: [String] -> Int
-part1 = maximum . M.elems . foldl execute M.empty
+data Cpu = Cpu { registers :: M.Map String Int 
+               , highest :: Int
+               }
 
-execute :: M.Map String Int -> String -> M.Map String Int
-execute registers line = go $ parse line
+part1 :: [String] -> Int
+part1 = maximum . M.elems . registers . run
+
+part2 :: [String] -> Int
+part2 = highest . run
+
+run :: [String] -> Cpu
+run = foldl execute Cpu { registers = M.empty, highest = 0 }
+
+execute :: Cpu -> String -> Cpu
+execute cpu@Cpu{..} line = go $ parse line
     where
         go Command{..} = if comp (get r2)
-                            then M.insert r1 (op $ get r1) registers
-                            else registers
+                            then Cpu { registers = M.insert r1 (op $ get r1) registers, highest = max (op $ get r1) highest }
+                            else cpu
         get r = M.findWithDefault 0 r registers
 
 parse :: String -> Command
@@ -43,6 +53,3 @@ parse xs = Command { r1 = head ws
         buildComp "==" x = let v = (read x :: Int) in (==v)
         buildComp "!=" x = let v = (read x :: Int) in (/=v)
         buildComp comp _ = error $ "Unknown comparison: " ++ comp
-
-part2 :: [String] -> Int
-part2 = undefined
