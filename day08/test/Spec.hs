@@ -1,5 +1,4 @@
 import Test.Hspec hiding (example)
-
 import Lib (part1, part2)
 
 example :: [String]
