@@ -31,7 +31,9 @@ execute :: Cpu -> String -> Cpu
 execute cpu@Cpu{..} line = go $ parse line
     where
         go Command{..} = if comp (get r2)
-                            then Cpu { registers = M.insert r1 (op $ get r1) registers, highest = max (op $ get r1) highest }
+                            then let v = op $ get r1 in Cpu { registers = M.insert r1 v registers
+                                                            , highest = max v highest
+                                                            }
                             else cpu
         get r = M.findWithDefault 0 r registers
 
