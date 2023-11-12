@@ -37,6 +37,7 @@ library:
   source-dirs: src
   dependencies:
   - containers
+  - extra
 
 executables:
   day07-exe:
