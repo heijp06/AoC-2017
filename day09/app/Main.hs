@@ -3,4 +3,9 @@ module Main (main) where
 import Lib
 
 main :: IO ()
-main = someFunc
+main = do
+    xs <- head . lines <$> readFile "..\\data\\day09.txt"
+    putStr "Part 1: "
+    print $ part1 xs
+    putStr "Part 2: "
+    print $ part2 xs

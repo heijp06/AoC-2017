@@ -1,6 +1,10 @@
 module Lib
-    ( someFunc
+    ( part1
+    , part2
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+part1 :: String -> Int
+part1 = undefined
+
+part2 :: String -> Int
+part2 = undefined
