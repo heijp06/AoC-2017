@@ -21,3 +21,6 @@ main :: IO ()
 main = hspec $ do
     describe "Part 1" $ do
         it "part1 example == \"tknk\"" $ part1 example `shouldBe` "tknk"
+
+    describe "Part 2" $ do
+        it "part2 example == 60" $ part2 example `shouldBe` 60
