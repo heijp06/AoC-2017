@@ -17,11 +17,11 @@ parse :: String -> (Int, Int)
 parse = fst . head . readP_to_S (group 1)
 
 group :: Int -> ReadP (Int, Int)
-group score = do
+group level = do
     _ <- char '{'
-    xs <- (group (score + 1) +++ ((0,) <$> garbage)) `sepBy` char ','
+    xs <- (group (level + 1) +++ ((0,) <$> garbage)) `sepBy` char ','
     _ <- char '}'
-    return (sum (map fst xs) + score, sum (map snd xs))
+    return (sum (map fst xs) + level, sum (map snd xs))
 
 garbage :: ReadP Int
 garbage = do
