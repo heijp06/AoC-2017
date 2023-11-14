@@ -24,12 +24,12 @@ groupParser (level, canceled) = do
 garbageParser :: ReadP (Int, Int)
 garbageParser = do
     _ <- char '<'
-    canceled <- length . filter (/='>') <$> many (ignoreParser <++ satisfy (/='>'))
+    canceled <- sum <$> many (ignoreParser <++ (const 1 <$> satisfy (/='>')))
     _ <- char '>'
     return (0, canceled)
 
-ignoreParser :: ReadP Char
+ignoreParser :: ReadP Int
 ignoreParser = do
     _ <- char '!'
     _ <- get
-    return '>'
+    return 0
