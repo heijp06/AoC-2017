@@ -15,18 +15,18 @@ parse :: String -> (Int, Int)
 parse = fst . head . readP_to_S (groupParser (1, 0))
 
 groupParser :: (Int, Int) -> ReadP (Int, Int)
-groupParser (score, canceled) = do
+groupParser (score, nonCanceled) = do
     _ <- char '{'
     xs <- sepBy (groupParser (score + 1, 0) +++ garbageParser) (char ',')
     _ <- char '}'
-    return $ (sum (map fst xs) + score, sum (map snd xs) + canceled)
+    return $ (sum (map fst xs) + score, sum (map snd xs) + nonCanceled)
 
 garbageParser :: ReadP (Int, Int)
 garbageParser = do
     _ <- char '<'
-    canceled <- sum <$> many (ignoreParser <++ (const 1 <$> satisfy (/='>')))
+    nonCanceled <- sum <$> many (ignoreParser <++ (const 1 <$> satisfy (/='>')))
     _ <- char '>'
-    return (0, canceled)
+    return (0, nonCanceled)
 
 ignoreParser :: ReadP Int
 ignoreParser = do
