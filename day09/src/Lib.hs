@@ -19,7 +19,7 @@ group (score, nonCanceled) = do
     _ <- char '{'
     xs <- sepBy (group (score + 1, 0) +++ garbage) (char ',')
     _ <- char '}'
-    return $ (sum (map fst xs) + score, sum (map snd xs) + nonCanceled)
+    return (sum (map fst xs) + score, sum (map snd xs) + nonCanceled)
 
 garbage :: ReadP (Int, Int)
 garbage = do
