@@ -17,7 +17,7 @@ parse = fst . head . readP_to_S (group (1, 0))
 group :: (Int, Int) -> ReadP (Int, Int)
 group (score, nonCanceled) = do
     _ <- char '{'
-    xs <- sepBy (group (score + 1, 0) +++ garbage) (char ',')
+    xs <- (group (score + 1, 0) +++ garbage) `sepBy` (char ',')
     _ <- char '}'
     return (sum (map fst xs) + score, sum (map snd xs) + nonCanceled)
 
