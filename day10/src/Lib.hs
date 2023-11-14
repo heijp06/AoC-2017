@@ -22,14 +22,14 @@ solve n xs = liftA2 (*) head (head . tail) result
         (result, _, _) = foldl tie ([0..n-1], 0, 0) xs
         tie (ys, pos, skip) x = (reverseAt pos x ys, (pos + x + skip) `mod` n, skip + 1)
 
-rotateLeft :: Int -> [a] -> [a]
-rotateLeft n xs = let n' = n `mod` length xs in drop n' xs ++ take n' xs
+reverseAt :: Int -> Int -> [a] -> [a]
+reverseAt index len = rotateRight index . reverseFirst len . rotateLeft index
 
 rotateRight :: Int -> [a] -> [a]
 rotateRight = rotateLeft . negate
 
+rotateLeft :: Int -> [a] -> [a]
+rotateLeft n xs = let n' = n `mod` length xs in drop n' xs ++ take n' xs
+
 reverseFirst :: Int -> [a] -> [a]
 reverseFirst n xs = (reverse . take n) xs ++ drop n xs
-
-reverseAt :: Int -> Int -> [a] -> [a]
-reverseAt index len = rotateRight index . reverseFirst len . rotateLeft index
