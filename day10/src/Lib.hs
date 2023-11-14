@@ -8,6 +8,8 @@ module Lib
     , solve
     ) where
 
+import Control.Applicative (liftA2)
+
 part1 :: [Int] -> Int
 part1 = solve 256
 
@@ -15,7 +17,7 @@ part2 :: [Int] -> Int
 part2 = undefined
 
 solve :: Int -> [Int] -> Int
-solve n xs = head result * (head . tail) result
+solve n xs = liftA2 (*) head (head . tail) result
     where
         (result, _, _) = foldl tie ([0..n-1], 0, 0) xs
         tie (ys, pos, skip) x = (reverseAt pos x ys, (pos + x + skip) `mod` n, skip + 1)
