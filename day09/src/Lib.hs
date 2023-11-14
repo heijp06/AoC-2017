@@ -26,12 +26,11 @@ group score = do
 garbage :: ReadP Int
 garbage = do
     _ <- char '<'
-    nonCanceled <- sum <$> many (ignore <++ (1 <$ satisfy (/='>')))
+    nonCanceled <- sum <$> many ((0 <$ ignore) <++ (1 <$ satisfy (/='>')))
     _ <- char '>'
     return nonCanceled
 
-ignore :: ReadP Int
+ignore :: ReadP Char
 ignore = do
     _ <- char '!'
-    _ <- get
-    return 0
+    get
