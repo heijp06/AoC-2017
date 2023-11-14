@@ -12,14 +12,14 @@ part2 :: String -> Int
 part2 = snd . parse
 
 parse :: String -> (Int, Int)
-parse = fst . head . readP_to_S (group (1, 0))
+parse = fst . head . readP_to_S (group 1)
 
-group :: (Int, Int) -> ReadP (Int, Int)
-group (score, nonCanceled) = do
+group :: Int -> ReadP (Int, Int)
+group (score) = do
     _ <- char '{'
-    xs <- (group (score + 1, 0) +++ garbage) `sepBy` char ','
+    xs <- (group (score + 1) +++ garbage) `sepBy` char ','
     _ <- char '}'
-    return (sum (map fst xs) + score, sum (map snd xs) + nonCanceled)
+    return (sum (map fst xs) + score, sum (map snd xs))
 
 garbage :: ReadP (Int, Int)
 garbage = do
