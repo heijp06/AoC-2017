@@ -15,11 +15,11 @@ parse :: String -> (Int, Int)
 parse = fst . head . readP_to_S (groupParser (1, 0))
 
 groupParser :: (Int, Int) -> ReadP (Int, Int)
-groupParser (level, canceled) = do
+groupParser (score, canceled) = do
     _ <- char '{'
-    xs <- sepBy (groupParser (level + 1, 0) +++ garbageParser) (char ',')
+    xs <- sepBy (groupParser (score + 1, 0) +++ garbageParser) (char ',')
     _ <- char '}'
-    return $ (sum (map fst xs) + level, sum (map snd xs) + canceled)
+    return $ (sum (map fst xs) + score, sum (map snd xs) + canceled)
 
 garbageParser :: ReadP (Int, Int)
 garbageParser = do
