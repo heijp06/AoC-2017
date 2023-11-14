@@ -6,8 +6,9 @@ import Lib
 
 main :: IO ()
 main = do
-    xs <- map read . splitOn "," <$> readFile "..\\data\\day10.txt"
+    xs <- readFile "..\\data\\day10.txt"
+    let ys = map read $ splitOn "," xs
     putStr "Part 1: "
-    print $ part1 xs
+    print $ part1 ys
     putStr "Part 2: "
     print $ part2 xs

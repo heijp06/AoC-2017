@@ -13,7 +13,7 @@ import Control.Applicative (liftA2)
 part1 :: [Int] -> Int
 part1 = solve 256
 
-part2 :: [Int] -> Int
+part2 :: String -> String
 part2 = undefined
 
 solve :: Int -> [Int] -> Int
