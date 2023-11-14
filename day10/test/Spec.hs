@@ -9,3 +9,6 @@ main = hspec $ do
 
     describe "rotate right" $ do
         it "rotateRight 2" $ rotateRight 2 "abcde" `shouldBe` "deabc"
+
+    describe "reverseFirst" $ do
+        it "reverseFirst 2" $ reverseFirst 2 "abcde" `shouldBe` "bacde"
