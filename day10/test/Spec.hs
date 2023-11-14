@@ -28,7 +28,7 @@ main = hspec $ do
         it "reverseAt 2 2" $ reverseAt 2 2 "abcde" `shouldBe` "abdce"
     
     describe "solve" $ do
-        it "solve example" $ solve 5 example `shouldBe` 12
+        it "solve example" $ solve 5 example `shouldBe` (12, [3, 4, 2, 1, 0])
     
     describe "part2: input -> hash" $ for_ examples2 test
     where

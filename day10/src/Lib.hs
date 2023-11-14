@@ -9,15 +9,23 @@ module Lib
     ) where
 
 import Control.Applicative (liftA2)
+import Data.Bits (xor)
+import Data.Char (ord)
+import Data.List.Split (chunksOf)
+import Text.Printf (printf)
 
 part1 :: [Int] -> Int
-part1 = solve 256
+part1 = fst . solve 256
 
 part2 :: String -> String
-part2 = undefined
+part2 xs = result
+    where
+        bytes = concat . replicate 64 $ map ord xs ++ [17, 31, 73, 47, 23]
+        shuffled = snd $ solve 256 bytes
+        result = concatMap (printf "%02x" . foldr1 xor) $ chunksOf 16 shuffled
 
-solve :: Int -> [Int] -> Int
-solve n xs = liftA2 (*) head (head . tail) result
+solve :: Int -> [Int] -> (Int, [Int])
+solve n xs = (liftA2 (*) head (head . tail) result, result)
     where
         (result, _, _) = foldl tie ([0..n-1], 0, 0) xs
         tie (ys, pos, skip) x = (reverseAt pos x ys, (pos + x + skip) `mod` n, skip + 1)
