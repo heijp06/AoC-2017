@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module Lib
     ( part1
     , part2
@@ -15,18 +17,18 @@ parse :: String -> (Int, Int)
 parse = fst . head . readP_to_S (group 1)
 
 group :: Int -> ReadP (Int, Int)
-group (score) = do
+group score = do
     _ <- char '{'
-    xs <- (group (score + 1) +++ garbage) `sepBy` char ','
+    xs <- (group (score + 1) +++ ((0,) <$> garbage)) `sepBy` char ','
     _ <- char '}'
     return (sum (map fst xs) + score, sum (map snd xs))
 
-garbage :: ReadP (Int, Int)
+garbage :: ReadP Int
 garbage = do
     _ <- char '<'
     nonCanceled <- sum <$> many (ignore <++ (const 1 <$> satisfy (/='>')))
     _ <- char '>'
-    return (0, nonCanceled)
+    return nonCanceled
 
 ignore :: ReadP Int
 ignore = do
