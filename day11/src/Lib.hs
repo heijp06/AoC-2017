@@ -14,8 +14,8 @@ part2 = snd . solve
 solve :: [String] -> (Int, Int)
 solve xs = (distance end, furthest)
     where
-        (end, furthest) = foldr (add . dirToPos) ((0, 0), 0) xs
-        add (x1, y1) ((x2, y2), d) = let pos = (x1 + x2, y1 + y2) in (pos, max d $ distance pos)
+        (end, furthest) = foldl add ((0, 0), 0) $ map dirToPos xs
+        add ((x2, y2), d) (x1, y1) = let pos = (x1 + x2, y1 + y2) in (pos, max d $ distance pos)
 
 distance :: Position -> Int
 distance (x, y) = a + b
