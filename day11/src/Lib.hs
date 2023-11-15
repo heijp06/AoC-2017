@@ -10,7 +10,7 @@ part1 xs = a + b
     where
         (x, y) = foldl add (0, 0) $ map dirToPos xs
         a = abs x `div` 2
-        b = abs (abs y - a) `div` 2
+        b = if a >= abs y then 0 else (abs y - a) `div` 2
 
 part2 :: [String] -> Int
 part2 = undefined
