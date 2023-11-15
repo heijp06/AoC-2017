@@ -8,7 +8,7 @@ type Position = (Int, Int)
 part1 :: [String] -> Int
 part1 xs = a + b
     where
-        (x, y) = foldl add (0, 0) $ map dirToPos xs
+        (x, y) = foldr (add . dirToPos) (0, 0) xs
         a = abs x `div` 2
         b = max 0 $ (abs y - a) `div` 2
 
