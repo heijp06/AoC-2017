@@ -13,8 +13,8 @@ module Lib
 -- The shortest distance to get to (0, 0) from (x, y) is found by:
 -- 1. Taking the minimum steps needed to get to x == 0: abs x
 -- 2. Because we have all combinations of x == +/- 1 and y == +/- 1: If abs x >= abs y, it is
---    always possible to always get to y == 0 while doing 1. Else the minimal amount of steps
---    needed to get to y == 0 is (abs x - abs y) `div` 2. (The `div` 2 is because "n" and "s"
+--    always possible to get to y == 0 while doing 1. Else the minimal amount of steps
+--    needed to get to y == 0 is (abs y - abs x) `div` 2. (The `div` 2 is because "n" and "s"
 --    have abs y == 2.)
 -- 3. Combining 1. and 2. gives the formula for the distance:
 --    abs x + max 0 ((abs y - abs x) `div` 2)
