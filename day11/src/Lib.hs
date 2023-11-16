@@ -18,16 +18,13 @@ solve xs = (distance end, furthest)
         add ((x1, y1), d) (x2, y2) = let pos = (x1 + x2, y1 + y2) in (pos, max d $ distance pos)
 
 distance :: Position -> Int
-distance (x, y) = a + b
-    where
-        a = abs x `div` 2
-        b = max 0 $ (abs y - a) `div` 2
+distance (x, y) = abs x + (max 0 $ (abs y - abs x) `div` 2)
 
 dirToPos :: String -> Position
 dirToPos "n" = (0, 2)
-dirToPos "ne" = (2, 1)
-dirToPos "se" = (2, -1)
+dirToPos "ne" = (1, 1)
+dirToPos "se" = (1, -1)
 dirToPos "s" = (0, -2)
-dirToPos "sw" = (-2, -1)
-dirToPos "nw" = (-2, 1)
+dirToPos "sw" = (-1, -1)
+dirToPos "nw" = (-1, 1)
 dirToPos xs = error $ "Unknown direction: " ++ xs
