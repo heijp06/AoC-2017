@@ -18,7 +18,7 @@ solve xs = (distance end, furthest)
         add ((x1, y1), d) (x2, y2) = let pos = (x1 + x2, y1 + y2) in (pos, max d $ distance pos)
 
 distance :: Position -> Int
-distance (x, y) = abs x + (max 0 $ (abs y - abs x) `div` 2)
+distance (x, y) = abs x + max 0 ((abs y - abs x) `div` 2)
 
 dirToPos :: String -> Position
 dirToPos "n" = (0, 2)
