@@ -35,6 +35,9 @@ ghc-options:
 
 library:
   source-dirs: src
+  dependencies:
+  - split
+  - containers
 
 executables:
   day12-exe:
