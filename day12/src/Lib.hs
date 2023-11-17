@@ -9,6 +9,7 @@ import qualified Data.Set as Set
 import Data.Map ((!))
 
 type Pipes = Map.Map Int [Int]
+type Programs = Set.Set Int
 
 part1 :: [String] -> Int
 part1 xs = solve Set.empty (Set.singleton 0) (parse xs)
@@ -24,7 +25,7 @@ parse = foldr addRow Map.empty
                 [prog, progs] -> Map.insert (read prog) (map read (splitOn "," progs)) pipes
                 _ -> error $ "Invalid row: " ++ row
 
-solve :: Set.Set Int -> Set.Set Int -> Pipes -> Int
+solve :: Programs -> Programs -> Pipes -> Int
 solve reachable current pipes
     | Set.null current = Set.size reachable
     | otherwise = solve newReachable newCurrent pipes
