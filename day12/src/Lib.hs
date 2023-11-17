@@ -17,7 +17,10 @@ part2 = undefined
 parse :: [String] -> Map.Map Int [Int]
 parse = foldr addRow Map.empty
     where
-        addRow x m = let [prog, progs] = splitOn " <-> " x in Map.insert (read prog) (map read (splitOn "," progs)) m
+        addRow row pipes =
+            case splitOn " <-> " row of
+                [prog, progs] -> Map.insert (read prog) (map read (splitOn "," progs)) pipes
+                _ -> error $ "Invalid row: " ++ row
 
 solve :: Set.Set Int -> Set.Set Int -> Map.Map Int [Int] -> Int
 solve reachable current pipes
