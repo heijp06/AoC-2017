@@ -16,7 +16,7 @@ part1 :: [String] -> Int
 part1 xs = Set.size $ solve Set.empty (Set.singleton 0) (parse xs)
 
 part2 :: [String] -> Int
-part2 = undefined 
+part2 xs = solve2 [] (parse xs)
 
 parse :: [String] -> Pipes
 parse = foldr addRow Map.empty
@@ -33,3 +33,9 @@ solve reachable current pipes
         where
             newReachable = Set.union reachable current
             newCurrent = Set.fromList [ to | from <- Set.toList current, to <- pipes ! from, Set.notMember to reachable ]
+
+solve2 :: [Programs] -> Pipes -> Int
+solve2 programs pipes = go [k | k <- Map.keys pipes, all (Set.notMember k) programs ]
+    where
+        go [] = length programs
+        go (x:_) = solve2 (solve Set.empty (Set.singleton x) pipes:programs) pipes
