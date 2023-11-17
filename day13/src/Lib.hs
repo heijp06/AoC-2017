@@ -6,7 +6,7 @@ module Lib
 import Data.List.Split (splitOn)
 
 part1 :: [String] -> Int
-part1 xs = sum [ depth * range | x <- xs, (depth, range) <- [parseLine x], depth `mod` (2 * range - 2) == 0 ]
+part1 xs = sum [ d * r | (d, r) <- map parseLine xs, d `mod` (2 * r - 2) == 0 ]
 
 part2 :: [String] -> Int
 part2 = undefined
