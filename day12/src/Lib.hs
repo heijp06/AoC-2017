@@ -13,7 +13,7 @@ type Pipes = Map.Map Program [Program]
 type Programs = Set.Set Program
 
 part1 :: [String] -> Int
-part1 xs = solve Set.empty (Set.singleton 0) (parse xs)
+part1 xs = Set.size $ solve Set.empty (Set.singleton 0) (parse xs)
 
 part2 :: [String] -> Int
 part2 = undefined 
@@ -26,9 +26,9 @@ parse = foldr addRow Map.empty
                 [prog, progs] -> Map.insert (read prog) (map read (splitOn "," progs)) pipes
                 _ -> error $ "Invalid row: " ++ row
 
-solve :: Programs -> Programs -> Pipes -> Int
+solve :: Programs -> Programs -> Pipes -> Programs
 solve reachable current pipes
-    | Set.null current = Set.size reachable
+    | Set.null current = reachable
     | otherwise = solve newReachable newCurrent pipes
         where
             newReachable = Set.union reachable current
