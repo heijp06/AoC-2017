@@ -8,8 +8,9 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.Map ((!))
 
-type Pipes = Map.Map Int [Int]
-type Programs = Set.Set Int
+type Program = Int
+type Pipes = Map.Map Program [Program]
+type Programs = Set.Set Program
 
 part1 :: [String] -> Int
 part1 xs = solve Set.empty (Set.singleton 0) (parse xs)
