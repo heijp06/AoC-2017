@@ -8,13 +8,15 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.Map ((!))
 
+type Pipes = Map.Map Int [Int]
+
 part1 :: [String] -> Int
 part1 xs = solve Set.empty (Set.singleton 0) (parse xs)
 
 part2 :: [String] -> Int
 part2 = undefined 
 
-parse :: [String] -> Map.Map Int [Int]
+parse :: [String] -> Pipes
 parse = foldr addRow Map.empty
     where
         addRow row pipes =
@@ -22,7 +24,7 @@ parse = foldr addRow Map.empty
                 [prog, progs] -> Map.insert (read prog) (map read (splitOn "," progs)) pipes
                 _ -> error $ "Invalid row: " ++ row
 
-solve :: Set.Set Int -> Set.Set Int -> Map.Map Int [Int] -> Int
+solve :: Set.Set Int -> Set.Set Int -> Pipes -> Int
 solve reachable current pipes
     | Set.null current = Set.size reachable
     | otherwise = solve newReachable newCurrent pipes
