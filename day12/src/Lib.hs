@@ -28,4 +28,4 @@ solve reachable current pipes
     | otherwise = solve newReachable newCurrent pipes
         where
             newReachable = Set.union reachable current
-            newCurrent = Set.fromList [ to | from <- Set.toList current, to <- pipes ! from, not $ Set.member to reachable ]
+            newCurrent = Set.fromList [ to | from <- Set.toList current, to <- pipes ! from, Set.notMember to reachable ]
