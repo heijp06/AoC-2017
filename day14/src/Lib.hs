@@ -3,6 +3,7 @@ module Lib
     , part2
     ) where
 
+import Data.List (partition)
 import qualified Data.Set as Set
 import Knot (hash)
 
@@ -15,14 +16,21 @@ part1 xs = length . filter (=='1') $ concatMap (concatMap toBin) hashes
         hashes = [ hash $ xs ++ "-" ++ show x | x <- [0..127] :: [Int] ]
 
 part2 :: String -> Int
-part2 xs = error $ show (length used)
+part2 xs = length $ foldr addSquare [] used
     where
         hashes = [ hash $ xs ++ "-" ++ show x | x <- [0..127] :: [Int] ]
         grid = concatMap (concatMap toBin) hashes
         squares = zip ((,) <$> [0..127] <*> [0..127]) grid
         used = [ s | (s, bit) <- squares, bit == '1' ]
 
-asd = undefined
+addSquare :: Square -> [Region] -> [Region]
+addSquare square regions = Set.unions (Set.singleton square : adjacent) : notAdjacent
+    where
+        (adjacent, notAdjacent) = partition isAdjacent regions
+        isAdjacent region = any (`Set.member` region) [ add square x | x <- [(0, 1), (1, 0), (0, -1), (-1, 0)] ]
+
+add :: Square -> Square -> Square
+add (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
 
 toBin :: Char -> String
 toBin '0' = "0000"
