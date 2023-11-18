@@ -37,6 +37,7 @@ library:
   source-dirs: src
   dependencies:
   - day10
+  - containers
 
 executables:
   day14-exe:
