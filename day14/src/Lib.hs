@@ -11,26 +11,24 @@ type Square = (Int, Int)
 type Region = Set.Set Square
 
 part1 :: String -> Int
-part1 xs = length . filter (=='1') $ concatMap (concatMap toBin) hashes
-    where
-        hashes = [ hash $ xs ++ "-" ++ show x | x <- [0..127] :: [Int] ]
+part1 = length . used
 
 part2 :: String -> Int
-part2 xs = length $ foldr addSquare [] used
+part2 = length . foldr addSquare [] . used
+
+used :: String -> [Square]
+used xs = [ s | (s, bit) <- squares, bit == '1' ]
     where
         hashes = [ hash $ xs ++ "-" ++ show x | x <- [0..127] :: [Int] ]
         grid = concatMap (concatMap toBin) hashes
         squares = zip ((,) <$> [0..127] <*> [0..127]) grid
-        used = [ s | (s, bit) <- squares, bit == '1' ]
 
 addSquare :: Square -> [Region] -> [Region]
 addSquare square regions = Set.unions (Set.singleton square : adjacent) : notAdjacent
     where
         (adjacent, notAdjacent) = partition isAdjacent regions
         isAdjacent region = any (`Set.member` region) [ add square x | x <- [(0, 1), (1, 0), (0, -1), (-1, 0)] ]
-
-add :: Square -> Square -> Square
-add (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+        add (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
 
 toBin :: Char -> String
 toBin '0' = "0000"
