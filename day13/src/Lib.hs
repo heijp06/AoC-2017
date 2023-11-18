@@ -5,8 +5,6 @@ module Lib
 
 import Data.List.Split (splitOn)
 
-type Sieve = [[Bool]]
-
 part1 :: [String] -> Int
 part1 xs = sum [ d * r | (d, r) <- map parseLine xs, d `mod` (2 * r - 2) == 0 ]
 
@@ -21,7 +19,6 @@ parseLine line = case splitOn ": " line of
 layer :: Int -> Int -> [Bool]
 layer d r = let m = 2 * r - 2 in cycle [ (x + d) `mod` m == 0 | x <- [0..m-1] ]
 
-solve :: Int -> Sieve -> Int
-solve n sieve
-    | not (any head sieve) = n
+solve :: Int -> [[Bool]] -> Int
+solve n sieve | not (any head sieve) = n
 solve n sieve = solve (n + 1) (map tail sieve)
