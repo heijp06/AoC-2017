@@ -2,7 +2,7 @@ module Main (main) where
 
 import Data.List.Split (splitOn)
 
-import Lib
+import Knot
 
 main :: IO ()
 main = do

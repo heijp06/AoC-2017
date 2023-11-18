@@ -1,7 +1,7 @@
 import Data.Foldable (for_)
 import Test.Hspec hiding (example)
 
-import Lib
+import Knot
 
 example :: [Int]
 example = [3, 4, 1, 5]

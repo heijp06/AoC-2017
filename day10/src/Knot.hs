@@ -1,5 +1,6 @@
-module Lib
-    ( part1
+module Knot
+    ( hash
+    , part1
     , part2
     , reverseAt
     , reverseFirst
@@ -13,6 +14,9 @@ import Data.Bits (xor)
 import Data.Char (ord)
 import Data.List.Split (chunksOf)
 import Text.Printf (printf)
+
+hash :: String -> String
+hash = part2
 
 part1 :: [Int] -> Int
 part1 = fst . solve 256

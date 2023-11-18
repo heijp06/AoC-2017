@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Knot
   other-modules:
       Paths_day10
   autogen-modules:
