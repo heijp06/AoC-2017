@@ -6,13 +6,13 @@ module Lib
 part1 :: Int -> Int
 part1 step = (xs ++ xs) !! (position + 1)
     where
-        (xs, position) = foldl (add step) ([0], 0) [1..2017]
+        (xs, position) = foldl (add1 step) ([0], 0) [1..2017]
 
 part2 :: Int -> Int
 part2 = undefined
 
-add :: Int -> ([Int], Int) -> Int -> ([Int], Int)
-add step (xs, position) x = (prefix ++ [x] ++ suffix, newPosition + 1)
+add1 :: Int -> ([Int], Int) -> Int -> ([Int], Int)
+add1 step (xs, position) x = (prefix ++ [x] ++ suffix, newPosition)
     where
-        newPosition = (position + step) `mod` length xs
-        (prefix, suffix) = splitAt (newPosition + 1) xs
+        newPosition = 1 + (position + step) `mod` length xs
+        (prefix, suffix) = splitAt newPosition xs
