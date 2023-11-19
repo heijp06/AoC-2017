@@ -1,0 +1,58 @@
+name permutation
+
+a b c d e f g h i j k l m n o p 
+f c m b g o n k e i h p a d j l 
+
+a -> f
+f -> o
+o -> j
+j -> i
+i -> e
+e -> g
+g -> n
+n -> d
+d -> b
+b -> c
+c -> m
+m -> a
+
+h -> k
+k -> h
+
+l -> p
+p -> l
+
+Period = 12
+
+1000000000 % 12 = 4
+
+===
+
+position permutation
+
+a b c d e f g h i j k l m n o p 
+n b c p k i o g j a l f h e d m 
+
+a -> n
+n -> e
+e -> k
+k -> l
+l -> f
+f -> i
+i -> j
+j -> a
+
+b -> b
+
+c -> c
+
+d -> p
+p -> m
+m -> h
+h -> g
+g -> o
+o -> d
+
+Period = 24
+
+1000000000 % 12 = 16

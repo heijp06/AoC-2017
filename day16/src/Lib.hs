@@ -5,12 +5,15 @@ module Lib
     ) where
 
 import Data.List.Split (splitOn)
+import Data.List (partition)
 
 part1 :: [String] -> String
 part1 = solve ['a'..'p']
 
 part2 :: [String] -> String
-part2 = undefined
+part2 commands = solve (solve ['a'..'p'] (concat $ replicate 4 partners)) (concat $ replicate 16 noPartners)
+    where
+        (partners, noPartners) = partition ((=='p') . head) commands
 
 solve :: String -> [String] -> String
 solve = foldl execute
