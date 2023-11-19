@@ -39,6 +39,7 @@ library:
   - containers
   - mtl
   - split
+  - transformers
 
 executables:
   day18-exe:

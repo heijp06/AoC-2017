@@ -38,6 +38,7 @@ library
     , containers
     , mtl
     , split
+    , transformers
   default-language: Haskell2010
 
 executable day18-exe
