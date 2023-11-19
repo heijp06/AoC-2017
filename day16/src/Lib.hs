@@ -11,9 +11,11 @@ part1 :: [String] -> String
 part1 = solve ['a'..'p']
 
 part2 :: [String] -> String
-part2 commands = solve (solve ['a'..'p'] (concat $ replicate 4 partners)) (concat $ replicate 16 noPartners)
+part2 commands = solve (solve ['a'..'p'] namePermutations) positionPermutations
     where
         (partners, noPartners) = partition ((=='p') . head) commands
+        namePermutations = concat $ replicate 4 partners
+        positionPermutations = concat $ replicate 16 noPartners
 
 solve :: String -> [String] -> String
 solve = foldl execute
