@@ -48,6 +48,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - day16
+    - split
 
 tests:
   day16-test:
@@ -60,3 +61,4 @@ tests:
     dependencies:
     - day16
     - hspec
+    - hspec-core
