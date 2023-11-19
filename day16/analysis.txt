@@ -7,7 +7,8 @@ first and then do all permutations of the other type. (Permutations of the same 
 done in the order they came in the input.)
 
 Below are the accumulated permutations of all name and position permutations in the input
-and their periods.
+and their periods. These were found by doing part1 on just the name permutations and just
+the position permutations.
 
 To do 1 billion permutation is equivalent to doing 1 billion mod period permutations.
 
