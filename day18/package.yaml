@@ -35,6 +35,10 @@ ghc-options:
 
 library:
   source-dirs: src
+  dependencies:
+  - containers
+  - mtl
+  - split
 
 executables:
   day18-exe:
