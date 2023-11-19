@@ -1,3 +1,20 @@
+There are 2 kinds of permutations here.
+- Name permutations: partner: Permutes on the names of the items: pe/b (where e and b are the names).
+- Position permutations: spin and exchange: Permute on the position of the items.
+
+These 2 types of permutations are independent in the sense that we can do all permutations of 1 type
+first and then do all permutations of the other type. (Permutations of the same type should always be
+done in the order they came in the input.)
+
+Below are the accumulated permutations of all name and position permutations in the input
+and their periods.
+
+To do 1 billion permutation is equivalent to doing 1 billion mod period permutations.
+
+The final result is found by first doing the name permutations and then the position permutations.
+
+===
+
 name permutation
 
 a b c d e f g h i j k l m n o p 
