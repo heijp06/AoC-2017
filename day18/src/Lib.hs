@@ -11,7 +11,8 @@ import Data.Char (isLower)
 import qualified Data.Map as Map
 import Data.List.Split (splitOn)
 
-data Cpu = Cpu { code :: [String]
+data Cpu = Cpu { part :: Int
+               , code :: [String]
                , programCounter :: Int
                , registers :: Map.Map Char Int
                , sound :: Maybe Int
@@ -21,15 +22,16 @@ data Cpu = Cpu { code :: [String]
 type Program = StateT Cpu (Either String)
 
 part1 :: [String] -> Int
-part1 xs = case evalStateT firstRecover (newCpu xs) of
+part1 xs = case evalStateT firstRecover (newCpu 1 xs) of
             Right value -> value
             Left message -> error message
 
 part2 :: [String] -> Int
 part2 = undefined
 
-newCpu :: [String] -> Cpu
-newCpu xs = Cpu { code = xs
+newCpu :: Int -> [String] -> Cpu
+newCpu part xs = Cpu { part = part
+                , code = xs
                 , programCounter = 0
                 , registers = Map.empty
                 , sound = Nothing
@@ -38,20 +40,28 @@ newCpu xs = Cpu { code = xs
 
 firstRecover :: Program Int
 firstRecover = do
+    p <- getPart
     command <- getCommand
     case splitOn " " command of
         ["set", register, value] -> set register value
         ["add", register, value] -> add register value
         ["mul", register, value] -> mul register value
         ["mod", register, value] -> mod' register value
-        ["snd", value] -> snd' value
-        ["rcv", register] -> rcv register
+        ["snd", value] -> if p == 1 then snd' value else raise "Part2 is not implemented."
+        ["rcv", register] -> if p == 1 then rcv register else raise "Part2 is not implemented."
         ["jgz", register, value] -> jgz register value
         _ -> raise $ "Unknown command: " ++ command
     Cpu{..} <- get
-    case recovered of
-        Just x -> return x
-        _ -> firstRecover
+    if p == 1
+        then case recovered of
+                Just x -> return x
+                _ -> firstRecover
+        else raise "Part 2 is not implemented."
+
+getPart :: Program Int
+getPart = do
+    Cpu{..} <- get
+    return part
 
 getCommand :: Program String
 getCommand = do
@@ -116,5 +126,5 @@ jgz register value = do
             cpu@Cpu{..} <- get
             put cpu { programCounter = programCounter + v - 1 }
 
-raise :: String -> Program ()
+raise :: String -> Program a
 raise message = lift $ Left message
