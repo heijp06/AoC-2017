@@ -22,7 +22,7 @@ data Cpu = Cpu { part :: Int
 type Program = StateT Cpu (Either String)
 
 part1 :: [String] -> Int
-part1 xs = case evalStateT firstRecover (newCpu 1 xs) of
+part1 xs = case evalStateT run (newCpu 1 xs) of
             Right value -> value
             Left message -> error message
 
@@ -38,8 +38,8 @@ newCpu part xs = Cpu { part = part
                 , recovered = Nothing
                 }
 
-firstRecover :: Program Int
-firstRecover = do
+run :: Program Int
+run = do
     p <- getPart
     command <- getCommand
     case splitOn " " command of
@@ -55,7 +55,7 @@ firstRecover = do
     if p == 1
         then case recovered of
                 Just x -> return x
-                _ -> firstRecover
+                _ -> run
         else raise "Part 2 is not implemented."
 
 getPart :: Program Int
