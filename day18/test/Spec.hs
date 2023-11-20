@@ -31,4 +31,4 @@ main = hspec $ do
         it "part1 example == 4" $ part1 example `shouldBe` 4
 
     describe "Part 2" $ do
-        it "part2 example == 3" $ part2 example `shouldBe` 3
+        it "part2 example2 == 3" $ part2 example2 `shouldBe` 3

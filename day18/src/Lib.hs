@@ -10,6 +10,7 @@ import Control.Monad.Trans.State.Lazy (StateT, evalStateT, get, put)
 import Data.Char (isLower)
 import qualified Data.Map as Map
 import Data.List.Split (splitOn)
+import Prelude hiding (id)
 
 data Cpu = Cpu { part :: Int
                , code :: [String]
@@ -17,6 +18,12 @@ data Cpu = Cpu { part :: Int
                , registers :: Map.Map Char Int
                , sound :: Maybe Int
                , recovered :: Maybe Int
+               , received :: [Int]
+               , sent :: [Int]
+               , blocked :: Bool
+               , numberSent :: Int
+               , pid :: Int
+               , stopped :: Bool
                }
 
 type Program = StateT Cpu (Either String)
@@ -27,7 +34,11 @@ part1 xs = case evalStateT run (newCpu 1 xs) of
             Left message -> error message
 
 part2 :: [String] -> Int
-part2 = undefined
+part2 xs = case evalStateT (solve2 (createCpu 1)) (createCpu 0) of
+            Right value -> value
+            Left message -> error message
+    where
+        createCpu id = (newCpu 2 xs) { registers = Map.singleton 'p' id, pid = id }
 
 newCpu :: Int -> [String] -> Cpu
 newCpu part xs = Cpu { part = part
@@ -36,27 +47,72 @@ newCpu part xs = Cpu { part = part
                      , registers = Map.empty
                      , sound = Nothing
                      , recovered = Nothing
+                     , received = []
+                     , sent = []
+                     , blocked = False
+                     , numberSent = 0
+                     , pid = 0
+                     , stopped = False
                      }
+
+solve2 :: Cpu -> Program Int
+solve2 other = do
+    receiveAll (sent other)
+    stop <- isBlocked
+    if stop
+        then do
+            cpu <- get
+            if pid cpu == 1
+                then return (numberSent cpu)
+                else return (numberSent other)
+        else do
+            _ <- run
+            this <- get
+            put other
+            solve2 this
+
+isBlocked :: Program Bool
+isBlocked = do
+    Cpu{..} <- get
+    return $ blocked || stopped
+
+receiveAll :: [Int] -> Program ()
+receiveAll xs = do
+    cpu@Cpu{..} <- get
+    put cpu { received = reverse xs, blocked = null xs && blocked }
 
 run :: Program Int
 run = do
-    p <- getPart
-    command <- getCommand
-    case splitOn " " command of
-        ["set", register, value] -> set register value
-        ["add", register, value] -> add register value
-        ["mul", register, value] -> mul register value
-        ["mod", register, value] -> mod' register value
-        ["snd", value] -> if p == 1 then snd' value else raise "Part2 is not implemented."
-        ["rcv", register] -> if p == 1 then rcv register else raise "Part2 is not implemented."
-        ["jgz", register, value] -> jgz register value
-        _ -> raise $ "Unknown command: " ++ command
-    Cpu{..} <- get
-    if p == 1
-        then case recovered of
-                Just x -> return x
-                _ -> run
-        else raise "Part 2 is not implemented."
+    stop <- shouldStop
+    if stop
+        then return (-1)
+        else do
+            p <- getPart
+            command <- getCommand
+            case splitOn " " command of
+                ["set", register, value] -> set register value
+                ["add", register, value] -> add register value
+                ["mul", register, value] -> mul register value
+                ["mod", register, value] -> mod' register value
+                ["snd", value] -> if p == 1 then snd' value else doSend value
+                ["rcv", register] -> if p == 1 then rcv register else doReceive register
+                ["jgz", register, value] -> jgz register value
+                _ -> raise $ "Unknown command: " ++ command
+            Cpu{..} <- get
+            if p == 1
+                then case recovered of
+                        Just x -> return x
+                        _ -> run
+                else raise "Part 2 is not implemented."
+
+shouldStop :: Program Bool
+shouldStop = do
+    cpu@Cpu{..} <- get
+    if programCounter < 0 || programCounter >= length code
+        then do
+            put cpu { stopped = True }
+            return True
+        else return False
 
 getPart :: Program Int
 getPart = do
@@ -125,6 +181,21 @@ jgz register value = do
             v <- getValue value
             cpu@Cpu{..} <- get
             put cpu { programCounter = programCounter + v - 1 }
+
+doSend :: String -> Program ()
+doSend value = do
+    v <- getValue value
+    cpu@Cpu{..} <- get
+    put cpu { numberSent = numberSent + 1, sent = v : sent }
+
+doReceive :: String -> Program ()
+doReceive register = do
+    cpu@Cpu{..} <- get
+    if null received
+        then put cpu { programCounter = programCounter - 1, blocked = True }
+        else do
+            let r = head register
+            put cpu { registers = Map.insert r (head received) registers, received = tail received }
 
 raise :: String -> Program a
 raise message = lift $ Left message
