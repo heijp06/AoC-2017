@@ -31,12 +31,12 @@ part2 = undefined
 
 newCpu :: Int -> [String] -> Cpu
 newCpu part xs = Cpu { part = part
-                , code = xs
-                , programCounter = 0
-                , registers = Map.empty
-                , sound = Nothing
-                , recovered = Nothing
-                }
+                     , code = xs
+                     , programCounter = 0
+                     , registers = Map.empty
+                     , sound = Nothing
+                     , recovered = Nothing
+                     }
 
 run :: Program Int
 run = do
