@@ -12,6 +12,9 @@ import qualified Data.Map as Map
 import Data.List.Split (splitOn)
 import Prelude hiding (id)
 
+import Debug.Trace (trace)
+import Text.Printf (printf)
+
 data Cpu = Cpu { part :: Int
                , code :: [String]
                , programCounter :: Int
@@ -68,7 +71,7 @@ solve2 other = do
         else do
             _ <- run
             this <- get
-            put other
+            put other { sent = [] }
             solve2 this
 
 isBlocked :: Program Bool
@@ -99,11 +102,14 @@ run = do
                 ["jgz", register, value] -> jgz register value
                 _ -> raise $ "Unknown command: " ++ command
             Cpu{..} <- get
+            -- if p == trace (printf "%d %d %s" pid (length received) command) 1
             if p == 1
                 then case recovered of
                         Just x -> return x
                         _ -> run
-                else raise "Part 2 is not implemented."
+                else if blocked
+                    then return (-1)
+                    else run
 
 shouldStop :: Program Bool
 shouldStop = do
