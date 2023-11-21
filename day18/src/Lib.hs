@@ -27,7 +27,7 @@ data Cpu = Cpu { part :: Int
                , numberSent :: Int
                , pid :: Int
                , stopped :: Bool
-               }
+               } deriving Show
 
 type Program = StateT Cpu (Either String)
 
@@ -103,6 +103,7 @@ run = do
                 _ -> raise $ "Unknown command: " ++ command
             Cpu{..} <- get
             -- if p == trace (printf "%d %d %s" pid (length received) command) 1
+            -- if p == trace (printf "%d %s %s %s %s %d" pid command (show registers) (show received) (show sent) programCounter) 1
             if p == 1
                 then case recovered of
                         Just x -> return x
