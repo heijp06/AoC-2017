@@ -12,9 +12,6 @@ import qualified Data.Map as Map
 import Data.List.Split (splitOn)
 import Prelude hiding (id)
 
-import Debug.Trace (trace)
-import Text.Printf (printf)
-
 data Cpu = Cpu { part :: Int
                , code :: [String]
                , programCounter :: Int
@@ -102,8 +99,6 @@ run = do
                 ["jgz", register, value] -> jgz register value
                 _ -> raise $ "Unknown command: " ++ command
             Cpu{..} <- get
-            -- if p == trace (printf "%d %d %s" pid (length received) command) 1
-            -- if p == trace (printf "%d %s %s %s %s %d" pid command (show registers) (show received) (show sent) programCounter) 1
             if p == 1
                 then case recovered of
                         Just x -> return x
@@ -181,7 +176,7 @@ rcv register = do
 jgz :: String -> String -> Program ()
 jgz register value = do
     r <- getValue register
-    if r == 0
+    if r <= 0
         then
             return ()
         else do
