@@ -3,6 +3,8 @@ module Lib
     , part2
     ) where
 
+import Particle
+
 part1 :: [String] -> Int
 part1 = undefined
 

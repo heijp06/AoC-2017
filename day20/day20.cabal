@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Particle
   other-modules:
       Paths_day20
   autogen-modules:
