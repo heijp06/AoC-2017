@@ -3,7 +3,6 @@ module Lib
     , part2
     ) where
 
-import Data.Map ((!))
 import qualified Data.Map as Map
 
 type Position = (Int, Int)
@@ -31,4 +30,5 @@ solve position direction grid = case Map.findWithDefault ' ' position grid of
     chr -> chr : move direction
     where
         move d = solve (position `add` d) d grid
-        newDirection = head $ filter (\d -> d /= direction && Map.member (position `add` d) grid) [(1, 0), (0, -1), (-1, 0), (0, 1)]
+        newDirection = head $ filter ((`Map.member` grid) . (add position)) options
+        options = let (x, y) = direction in [(y, x), (-y, -x)]
