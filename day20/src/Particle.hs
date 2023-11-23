@@ -7,12 +7,12 @@ module Particle
 import Data.Char (isDigit)
 import Text.ParserCombinators.ReadP
 
-type Vector = (Int, Int, Int)
+type Vector = [Int]
 
 data Particle = Particle { position :: Vector
                          , velocity :: Vector
                          , acceleration :: Vector
-                         } deriving (Eq, Show)
+                         } deriving (Eq, Ord, Show)
 
 parse :: String -> Particle
 parse = fst . head . readP_to_S particle
@@ -43,7 +43,7 @@ vector = do
     _ <- char ','
     z <- number
     _ <- char '>'
-    return (x, y, z)
+    return [x, y, z]
 
 number :: ReadP Int
 number = do
