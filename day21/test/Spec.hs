@@ -49,8 +49,8 @@ main = hspec $ do
         it "flip3 .###.#..# -> ##.#.##.." $ flip3 ".###.#..#" `shouldBe` "##.#.##.."
     
     describe "create" $ do
-        it "create example[0]" $ create (head example) `shouldBe` ("...#", "##.#.....")
-        it "create example[1]" $ create (example !! 1) `shouldBe` (".#...####", "#..#........#..#")
+        it "create example[0]" $ create rotate2 flip2 (head example) `shouldBe` rules2
+        it "create example[1]" $ create rotate3 flip3 (example !! 1) `shouldBe` rules3
 
     describe "parse" $ do
         it "parse example" $ parse example `shouldBe` (rules2, rules3)
