@@ -1,9 +1,13 @@
 {-# LANGUAGE TupleSections #-}
 
 module Rules ( Rules
+             , breakup
              , create
              , flip2
              , flip3
+             , indexes
+             , indexesBreakup
+             , join
              , parse
              , rotate2
              , rotate3
@@ -11,7 +15,7 @@ module Rules ( Rules
 
 import Prelude hiding (flip)
 import Data.List (partition)
-import Data.List.Split (splitOn)
+import Data.List.Split (chunksOf, splitOn)
 import qualified Data.Map as Map
 
 type Rules = Map.Map String String
@@ -48,3 +52,21 @@ flip3 = transform [2, 1, 0, 5, 4, 3, 8, 7, 6]
 
 transform :: [Int] -> Transformation
 transform is xs = map (xs !!) is
+
+breakup :: Int -> Int -> String -> [String]
+breakup bn n xs = chunksOf (n * n) $ (`transform` xs) (indexes bn n)
+
+join :: Int -> Int -> [String] -> String
+join bn n xss = (`transform` concat xss) (indexes bn n)
+
+indexes :: Int -> Int -> [Int]
+indexes bn n = [ by * bn * n * n + y * n + bx * n * n + x | by <- bns, y <- ns, bx <- bns, x <- ns ]
+    where
+        bns = [0..bn-1]
+        ns = [0..n-1]
+
+indexesBreakup :: Int -> Int -> [Int]
+indexesBreakup bn n = [ by * bn * n * n + bx * n + y * bn * n + x | by <- bns, bx <- bns, y <- ns, x <- ns ]
+    where
+        bns = [0..bn-1]
+        ns = [0..n-1]
