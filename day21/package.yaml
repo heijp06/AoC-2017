@@ -35,6 +35,9 @@ ghc-options:
 
 library:
   source-dirs: src
+  dependencies:
+  - containers
+  - split
 
 executables:
   day21-exe:
@@ -58,3 +61,4 @@ tests:
     dependencies:
     - day21
     - hspec
+    - containers
