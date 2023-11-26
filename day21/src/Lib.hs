@@ -6,6 +6,7 @@ module Lib
     ) where
 
 import Data.Map ((!))
+import qualified Data.Map as Map
 import Rules
 
 import Debug.Trace (trace)
@@ -25,7 +26,26 @@ part1 xs = length $ filter (/='.') step5
         step5 = enhance rules step4 -- 12 --> 18
 
 part2 :: [String] -> Int
-part2 = undefined
+part2  xs = undefined
+    where
+        rules = parse xs
+        result = last . take 6 . iterate (enhanceAll rules) $ Map.singleton start 1
+
+enhanceAll :: (Rules, Rules) -> Map.Map String Int -> Map.Map String Int
+enhanceAll rules = foldr (add rules) Map.empty . Map.toList
+
+add :: (Rules, Rules) -> (String, Int) -> Map.Map String Int -> Map.Map String Int
+add rules (xs, count) = foldr (add' count) Map.empty $ threeSteps rules xs
+
+add' :: Int -> String -> Map.Map String Int -> Map.Map String Int
+add' = undefined
+
+threeSteps :: (Rules, Rules) -> [String] -> [String]
+threeSteps rules xs = breakup 3 3 step3
+    where
+        step1 = enhance rules start -- 3 --> 4
+        step2 = enhance rules step1 -- 4 --> 6
+        step3 = enhance rules step2 -- 6 --> 9
 
 enhance :: (Rules, Rules) -> String -> String
 enhance _ xs | trace (printf "%2d %s" (length xs) xs) False = undefined
