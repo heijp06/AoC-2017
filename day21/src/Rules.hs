@@ -54,7 +54,7 @@ transform :: [Int] -> Transformation
 transform is xs = map (xs !!) is
 
 breakup :: Int -> Int -> String -> [String]
-breakup bn n xs = chunksOf (n * n) $ (`transform` xs) (indexes bn n)
+breakup bn n xs = chunksOf (n * n) $ (`transform` xs) (indexesBreakup bn n)
 
 join :: Int -> Int -> [String] -> String
 join bn n xss = (`transform` concat xss) (indexes bn n)
