@@ -6,12 +6,15 @@ module Lib
     ) where
 
 import Control.Monad.State.Lazy (State, execState, get, put)
-import qualified Data.Set as Set
+import qualified Data.Map as Map
 
 type Position = (Int, Int)
-type Grid = Set.Set Position
+type Grid = Map.Map Position NodeState
 
-data Virus = Virus { grid :: Grid
+data NodeState = Clean | Weakened | Infected | Flagged deriving Show
+
+data Virus = Virus { part :: Int
+                   , grid :: Grid
                    , position :: Position
                    , direction :: Position
                    , infected :: Int
@@ -19,25 +22,26 @@ data Virus = Virus { grid :: Grid
                    } deriving Show
 
 part1 :: [String] -> Int
-part1 = infected . execState burst . new . parse
+part1 = infected . execState burst . new 1 10000 . parse
 
 part2 :: [String] -> Int
 part2 = undefined
 
-new :: (Grid, Position) -> Virus
-new (grid, start) = Virus { grid = grid
-                          , position = start
-                          , direction = (0, -1)
-                          , infected = 0
-                          , steps = 10000
-                          }
+new :: Int -> Int -> (Grid, Position) -> Virus
+new part steps (grid, start) = Virus { part = part
+                                     , grid = grid
+                                     , position = start
+                                     , direction = (0, -1)
+                                     , infected = 0
+                                     , steps = steps
+                                     }
 
 parse :: [String] -> (Grid, Position)
 parse xs = (grid, start)
     where
         height = length xs
         width = length $ head xs
-        grid = Set.fromList [ (x, y) | y <- [0..height-1], x <- [0..width-1], (xs !! y) !! x == '#' ]
+        grid = Map.fromList [ ((x, y), Infected) | y <- [0..height-1], x <- [0..width-1], (xs !! y) !! x == '#' ]
         start = (width `div` 2, height `div` 2)
 
 burst :: State Virus ()
@@ -61,16 +65,16 @@ turn :: State Virus ()
 turn = do
     Virus{..} <- get
     let (x, y) = direction
-    if position `Set.member` grid
+    if position `Map.member` grid
         then put Virus { direction = (-y, x), .. }
         else put Virus { direction = (y, -x), .. }
 
 infect :: State Virus ()
 infect = do
     Virus{..} <- get
-    if position `Set.member` grid
-        then put Virus { grid = Set.delete position grid, .. }
-        else put Virus { grid = Set.insert position grid, infected = infected + 1, .. }
+    if position `Map.member` grid
+        then put Virus { grid = Map.delete position grid, .. }
+        else put Virus { grid = Map.insert position Infected grid, infected = infected + 1, .. }
 
 
 move :: State Virus ()
