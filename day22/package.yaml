@@ -35,6 +35,9 @@ ghc-options:
 
 library:
   source-dirs: src
+  dependencies:
+  - mtl
+  - containers
 
 executables:
   day22-exe:
@@ -58,4 +61,4 @@ tests:
     dependencies:
     - day22
     - hspec
-
+
