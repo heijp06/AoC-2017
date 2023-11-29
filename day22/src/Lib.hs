@@ -25,7 +25,7 @@ part1 :: [String] -> Int
 part1 = infected . execState burst . new 1 10000 . parse
 
 part2 :: [String] -> Int
-part2 = undefined
+part2 = infected . execState burst . new 2 10000000 . parse
 
 new :: Int -> Int -> (Grid, Position) -> Virus
 new part steps (grid, start) = Virus { part = part
@@ -65,17 +65,26 @@ turn :: State Virus ()
 turn = do
     Virus{..} <- get
     let (x, y) = direction
-    if position `Map.member` grid
-        then put Virus { direction = (-y, x), .. }
-        else put Virus { direction = (y, -x), .. }
+    case Map.findWithDefault Clean position grid of
+        Clean -> put Virus { direction = (y, -x), .. }
+        Weakened -> return ()
+        Infected -> put Virus { direction = (-y, x), .. }
+        Flagged -> put Virus { direction = (-x, -y), .. }
 
 infect :: State Virus ()
 infect = do
     Virus{..} <- get
-    if position `Map.member` grid
-        then put Virus { grid = Map.delete position grid, .. }
-        else put Virus { grid = Map.insert position Infected grid, infected = infected + 1, .. }
-
+    if part == 1
+        then
+            if position `Map.member` grid
+                then put Virus { grid = Map.delete position grid, .. }
+                else put Virus { grid = Map.insert position Infected grid, infected = infected + 1, .. }
+        else
+            case Map.findWithDefault Clean position grid of
+                Clean -> put Virus { grid = Map.insert position Weakened grid, .. }
+                Weakened -> put Virus { grid = Map.insert position Infected grid, infected = infected + 1, .. }
+                Infected -> put Virus { grid = Map.insert position Flagged grid, .. }
+                Flagged -> put Virus { grid = Map.delete position grid, .. }
 
 move :: State Virus ()
 move = do
